@@ -1,43 +1,67 @@
 # Sebenza Clocking System
-
-A digital employee attendance and working-hours management system built for **Umzamo Analytical Services** (a coal mining laboratory), replacing their current paper-based clock-in/clock-out process.
+Digital employee attendance &amp; working-hours management system for Umzamo Analytical Services. Flutter + ASP.NET + Supabase.
+# Sebenza Clocking System
 
 ## Project Overview
-Employees currently record their own arrival, departure, and overtime on paper timesheet registers — which creates unreliable attendance data (incorrect or missing clock times, illegible entries, lost/damaged registers). Sebenza Clocking System addresses this with automatically generated timestamps and a more verifiable attendance and overtime process.
 
-**Module:** ITC327W — Work-Integrated Learning, Central University of Technology
-**Assessment:** Group Assessment 1 (Phase 1: Planning, Requirements and Feasibility)
+Sebenza Clocking System is a digital employee attendance and
+working-hours management system developed for Umzamo Analytical
+Services.
 
-## Tech Stack
-- **Mobile app:** Flutter (employee clock-in/clock-out)
-- **Web app:** ASP.NET (admin, supervisor, and reporting functions)
-- **Backend:** Supabase (shared database and auth for both apps)
+The system is intended to replace the organisation's current
+paper-based attendance process with a digital solution for recording
+employee clock-in and clock-out times and managing working hours.
 
-## Repository Structure
-```
-/docs                 → SRS,stakeholder evidence
-/project-management   → Microsoft Project file (.mpp), Progress Tracker (.xlsx)
-/mobile-app           → Flutter source
-/web-app              → ASP.NET source
-/supabase             → Schema, migrations 
-```
+## Problem Statement
 
-## Group Members
-- Nkosinathi
-- Lerato
-- TK
-- Thapelo
-- Pedro
-- Tshepiso
-- Selloane
-- Kwanele Biyase
-- Paki
-- Tshegofatso
+Umzamo Analytical Services currently uses a manual paper-based
+process for recording employee attendance and working hours.
 
-## Stakeholder
-**Organisation:** Umzamo Analytical Services (Umzamowonke Trading and Projects t/a Umzamo Analytical Services)
-**Industry:** Coal Mining Laboratory
+The current process creates a risk of inaccurate attendance records,
+as employees may record their normal starting time despite arriving
+late and may record overtime that was not actually worked.
 
-## Status
-Phase 1 — Planning, Requirements and Feasibility (in progress)
+Sebenza aims to improve the accuracy, reliability and management of
+employee attendance records.
 
+## Project Aim
+
+To develop a digital attendance and working-hours management system
+that allows employee attendance to be recorded accurately and enables
+authorised users to manage attendance information.
+
+## Main Features
+
+- Employee authentication
+- Employee clock-in
+- Employee clock-out
+- Automatic date and time recording
+- Attendance history
+- Working-hours management
+- Overtime management
+- Employee management
+- Attendance monitoring and reporting
+
+
+### Frontend
+- Flutter
+
+### Backend
+- ASP.NET
+
+### Database
+- Supabase
+
+## System Architecture
+
+Flutter Mobile Application
+        |
+        v
+ASP.NET Backend/API
+        |
+        v
+Supabase Database
+
+## Project Status
+
+**Current Phase:** Phase 1 – Software Requirements Specification
