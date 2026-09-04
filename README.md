@@ -65,3 +65,15 @@ Supabase Database
 ## Project Status
 
 **Current Phase:** Phase 1 – Software Requirements Specification
+
+# members: 
+Vilane N 
+Choane SRT
+Makhetha L
+Sikithi T
+Leeuw SA
+Biyase K
+Sekotlo PG
+Choeu TM
+Stallenburg P
+Mandiba T
