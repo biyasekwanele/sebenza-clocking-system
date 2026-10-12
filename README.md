@@ -65,6 +65,7 @@ Supabase Database
 ## Project Status
 
 **Current Phase:** Phase 1 – Software Requirements Specification
+**Current Phase:** Phase 2 - PHASE 2: SYSTEM ARCHITECTURE AND DESIGN
 
 # members: 
 Vilane N 
