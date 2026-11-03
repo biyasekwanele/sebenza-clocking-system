@@ -1,0 +1,16 @@
+@model AttendanceRecord?
+@{ ViewData["Title"] = "Attendance Detail"; }
+@if (Model is null) { <p class="empty">Record not found.</p> } else {
+<div class="panel">
+  <dl class="detail">
+    <dt>Employee</dt><dd>@Model.EmployeeName (@Model.EmployeeCode)</dd>
+    <dt>Department</dt><dd>@Model.DepartmentName</dd>
+    <dt>Clock in</dt><dd>@Sast.DateTime(Model.ClockIn) @(Model.IsLate ? Html.Raw("<span class='tag red'>LATE</span>") : Html.Raw("<span class='tag green'>ON TIME</span>"))</dd>
+    <dt>Clock out</dt><dd>@(Model.ClockOut is null ? "Still clocked in" : Sast.DateTime(Model.ClockOut.Value))</dd>
+    <dt>Break</dt><dd>@Model.BreakMinutes minutes</dd>
+    <dt>Total hours</dt><dd>@(Model.TotalHours is null ? "—" : TimeCalculations.FormatHours(Model.TotalHours.Value))</dd>
+    <dt>Overtime</dt><dd>@Model.OvertimeHours.ToString("0.00") hours</dd>
+    <dt>Status</dt><dd><span class="tag">@Model.Status</span></dd>
+  </dl>
+  <p><a class="btn ghost" asp-action="Index">Back to records</a></p>
+</div> }

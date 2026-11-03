@@ -1,0 +1,28 @@
+@model EmployeeFormViewModel
+@{ ViewData["Title"] = Model.Id is null ? "Add Employee" : "Edit Employee"; }
+<form method="post" class="panel form-grid" asp-action="@(Model.Id is null ? "Create" : "Edit")">
+  @Html.AntiForgeryToken()
+  <div asp-validation-summary="ModelOnly" class="alert err"></div>
+  @if (Model.Id is not null) { <input type="hidden" asp-for="Id" /> }
+  <label>Employee code <input asp-for="EmployeeCode" placeholder="E002" /><span asp-validation-for="EmployeeCode" class="field-err"></span></label>
+  <label>Full name <input asp-for="FullName" /><span asp-validation-for="FullName" class="field-err"></span></label>
+  <label>Email <input asp-for="Email" type="email" /><span asp-validation-for="Email" class="field-err"></span></label>
+  <label>Role <select asp-for="Role" asp-items="Model.Roles"></select></label>
+  <label>Department <select asp-for="DepartmentId" asp-items="Model.Departments"><option value="">—</option></select></label>
+  @if (Model.Id is null)
+  {
+    <label>Temporary password (min 6 chars) <input asp-for="Password" type="text" autocomplete="new-password" placeholder="Employee sets their own after first login" /><span asp-validation-for="Password" class="field-err"></span></label>
+  }
+  else
+  {
+    <label>Active <select asp-for="IsActive"><option value="true">Active</option><option value="false">Deactivated</option></select></label>
+  }
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Save</button>
+    <a class="btn ghost" asp-action="Index">Cancel</a>
+  </div>
+</form>
+@if (Model.Id is null)
+{
+  <p class="hint">The Supabase Auth account is created automatically with this temporary password. If an account already exists for the email, it is linked instead.</p>
+}

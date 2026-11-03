@@ -1,0 +1,31 @@
+@model EmployeeIndexViewModel
+@{ ViewData["Title"] = "Employees"; }
+<form method="get" class="filters">
+  <label>Search <input type="search" name="q" value="@Model.Search" placeholder="Name or employee code" /></label>
+  <button class="btn" type="submit">Search</button>
+  <a class="btn primary" asp-action="Create">+ Add</a>
+</form>
+<div class="panel">
+<table class="tbl">
+  <thead><tr><th>Code</th><th>Name</th><th>Department</th><th>Role</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  @foreach (var e in Model.Employees)
+  {
+    <tr class="@(e.IsActive ? "" : "inactive")">
+      <td>@e.EmployeeCode</td><td>@e.FullName</td><td>@e.DepartmentName</td><td>@e.Role</td>
+      <td>@(e.ClockedInToday ? Html.Raw("<span class='tag green'>IN</span>") : Html.Raw("<span class='tag'>OUT</span>"))</td>
+      <td class="row-actions">
+        <a class="btn ghost sm" asp-action="Edit" asp-route-id="@e.Id">Edit</a>
+        <form method="post" asp-action="Deactivate" onsubmit="return confirm('@(e.IsActive ? "Deactivate" : "Reactivate") @e.FullName?')">
+          @Html.AntiForgeryToken()
+          <input type="hidden" name="id" value="@e.Id" />
+          <input type="hidden" name="active" value="@((!e.IsActive).ToString().ToLowerInvariant())" />
+          <button class="btn sm @(e.IsActive ? "reject" : "approve")">@(e.IsActive ? "Deactivate" : "Reactivate")</button>
+        </form>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>
+</div>
+<p class="hint">To add an employee: create their account first in Supabase Dashboard → Authentication → Users (tick “Auto confirm user”), then use + Add to link it to a profile.</p>
