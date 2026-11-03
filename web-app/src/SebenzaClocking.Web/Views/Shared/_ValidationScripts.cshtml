@@ -1,0 +1,7 @@
+<script>
+document.querySelectorAll("form").forEach(f => f.addEventListener("submit", e => {
+  let bad = false;
+  f.querySelectorAll("[required]").forEach(i => { i.classList.toggle("invalid", !i.value); if (!i.value) bad = true; });
+  if (bad) e.preventDefault();
+}));
+</script>

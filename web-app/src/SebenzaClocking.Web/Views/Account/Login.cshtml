@@ -1,0 +1,18 @@
+@model LoginViewModel
+@{ Layout = "_LoginLayout"; ViewData["Title"] = "Sign In"; }
+<form method="post" class="stack">
+  @Html.AntiForgeryToken()
+  <div asp-validation-summary="ModelOnly" class="alert err"></div>
+  <label>Email
+    <input asp-for="Email" type="email" autocomplete="username" placeholder="supervisor.demo@example.com" />
+    <span asp-validation-for="Email" class="field-err"></span>
+  </label>
+  <label>Password
+    <input asp-for="Password" autocomplete="current-password" placeholder="••••••••" />
+    <span asp-validation-for="Password" class="field-err"></span>
+  </label>
+  <label class="inline"><input asp-for="RememberMe" /> Remember this device</label>
+  <button class="btn primary" type="submit">SIGN IN</button>
+  <p class="hint">Supervisor, HR and administrator accounts only. Employees use the Sebenza mobile app.</p>
+</form>
+@section Scripts { <partial name="_ValidationScripts" /> }

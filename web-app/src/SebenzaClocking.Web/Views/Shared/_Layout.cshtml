@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>@(ViewData["Title"] != null ? ViewData["Title"] + " · " : "")Sebenza</title>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">Sebenza</div>
+    <nav>
+      @{ var c = ViewContext.RouteData.Values["controller"]?.ToString(); }
+      <a asp-controller="Dashboard" asp-action="Index" class="@(c == "Dashboard" ? "active" : "")">Dashboard</a>
+      <a asp-controller="Attendance" asp-action="Index" class="@(c == "Attendance" ? "active" : "")">Attendance</a>
+      <a asp-controller="Overtime" asp-action="Index" class="@(c == "Overtime" ? "active" : "")">Overtime</a>
+      <a asp-controller="Corrections" asp-action="Index" class="@(c == "Corrections" ? "active" : "")">Corrections</a>
+      <a asp-controller="Reports" asp-action="Index" class="@(c == "Reports" ? "active" : "")">Reports</a>
+      @if (User.IsInRole("admin"))
+      {
+        <a asp-controller="Employees" asp-action="Index" class="@(c == "Employees" ? "active" : "")">Employees</a>
+        <a asp-controller="Audit" asp-action="Index" class="@(c == "Audit" ? "active" : "")">Audit Log</a>
+      }
+    </nav>
+    <div class="sidebar-foot">
+      <div class="who">@User.Identity?.Name <span class="role-tag">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span></div>
+      <a asp-controller="Account" asp-action="Logout">Sign out</a>
+    </div>
+  </aside>
+  <main class="content">
+    <header class="topbar">
+      <h1>@ViewData["Title"]</h1>
+      <span class="date">@Sast.FromUtc(DateTime.UtcNow).ToString("dddd, dd MMM yyyy · HH:mm") SAST</span>
+    </header>
+    @if (TempData["ok"] is string ok) { <div class="alert ok">@ok</div> }
+    @if (TempData["err"] is string err) { <div class="alert err">@err</div> }
+    @RenderBody()
+  </main>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
