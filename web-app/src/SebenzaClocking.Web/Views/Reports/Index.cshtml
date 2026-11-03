@@ -1,0 +1,23 @@
+@{ ViewData["Title"] = "Reports"; }
+<section class="grid-2">
+@foreach (var r in new[] {
+    ("attendance", "ATTENDANCE", "Attendance Summary", "Hours worked per employee, day by day"),
+    ("late", "COMPLIANCE", "Late Arrival Report", "Clock-ins after the 06:00 SAST start (5-minute grace)"),
+    ("overtime", "OVERTIME", "Overtime Summary", "Approved and pending overtime requests"),
+    ("roster", "PEOPLE", "Employee Roster", "Active employees with department, role and live status") })
+{
+  <div class="panel report-card">
+    <span class="tag amber-tag">@r.Item2</span>
+    <h2>@r.Item3</h2>
+    <p class="muted">@r.Item4</p>
+    <form method="get" asp-action="Export" class="report-actions">
+      <input type="hidden" name="type" value="@r.Item1" />
+      <label>From <input type="date" name="from" value="@ViewBag.From" required /></label>
+      <label>To <input type="date" name="to" value="@ViewBag.To" required /></label>
+      <button class="btn" name="format" value="pdf">PDF</button>
+      <button class="btn accent" name="format" value="csv">CSV</button>
+    </form>
+  </div>
+}
+</section>
+<p class="hint">Exports are generated server-side from the live database, respecting each user’s permissions (RLS).</p>

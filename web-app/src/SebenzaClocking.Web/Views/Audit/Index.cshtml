@@ -1,0 +1,74 @@
+@model IReadOnlyList<AuditLogEntry>
+@{ ViewData["Title"] = "Audit Log"; }
+
+@functions {
+    /// Render audit details: UPDATE rows as old → new field diffs, INSERT rows as key/value pairs.
+    Microsoft.AspNetCore.Html.HtmlString FormatDetails(System.Text.Json.JsonElement? details)
+    {
+        if (details is null || details.Value.ValueKind != System.Text.Json.JsonValueKind.Object)
+            return new Microsoft.AspNetCore.Html.HtmlString("<span class='muted'>—</span>");
+
+        var root = details.Value;
+        var sb = new System.Text.StringBuilder();
+
+        if (root.TryGetProperty("old", out var oldEl) && root.TryGetProperty("new", out var newEl)
+            && oldEl.ValueKind == System.Text.Json.JsonValueKind.Object
+            && newEl.ValueKind == System.Text.Json.JsonValueKind.Object)
+        {
+            sb.Append("<div class='audit-diff'>");
+            foreach (var prop in newEl.EnumerateObject())
+            {
+                var oldVal = oldEl.TryGetProperty(prop.Name, out var o) ? Shorten(o) : "—";
+                var newVal = Shorten(prop.Value);
+                if (oldVal == newVal) continue;   // unchanged fields add noise
+                sb.Append("<div><span class='k'>").Append(prop.Name).Append("</span> ")
+                    .Append("<span class='old'>").Append(System.Net.WebUtility.HtmlEncode(oldVal)).Append("</span> → ")
+                    .Append("<span class='new'>").Append(System.Net.WebUtility.HtmlEncode(newVal)).Append("</span></div>");
+            }
+            sb.Append("</div>");
+            return new Microsoft.AspNetCore.Html.HtmlString(sb.ToString());
+        }
+
+        sb.Append("<div class='audit-diff'>");
+        foreach (var prop in root.EnumerateObject())
+            sb.Append("<div><span class='k'>").Append(prop.Name).Append("</span> ")
+              .Append(System.Net.WebUtility.HtmlEncode(Shorten(prop.Value))).Append("</div>");
+        sb.Append("</div>");
+        return new Microsoft.AspNetCore.Html.HtmlString(sb.ToString());
+    }
+
+    static string Shorten(System.Text.Json.JsonElement el) => el.ValueKind switch
+    {
+        System.Text.Json.JsonValueKind.String => el.GetString() ?? "",
+        System.Text.Json.JsonValueKind.Null or System.Text.Json.JsonValueKind.Undefined => "—",
+        _ when el.ToString().Length > 80 => el.ToString()[..77] + "…",
+        _ => el.ToString(),
+    };
+}
+
+<form method="get" class="filters">
+  <label>Entity
+    <select name="entity">
+      <option value="">All</option>
+      @foreach (var e in (string[])ViewBag.Entities) { <option value="@e" selected="@(e == ViewBag.Entity)">@e</option> }
+    </select>
+  </label>
+  <button class="btn">Filter</button>
+</form>
+<div class="panel">
+<table class="tbl">
+  <thead><tr><th>When (SAST)</th><th>Actor</th><th>Entity</th><th>Action</th><th>Details</th></tr></thead>
+  <tbody>
+  @foreach (var a in Model)
+  {
+    <tr>
+      <td style="white-space:nowrap">@Sast.DateTime(a.CreatedAt)</td>
+      <td>@a.ActorName</td>
+      <td>@a.Entity</td>
+      <td><span class="tag">@a.Action</span></td>
+      <td class="wrap">@FormatDetails(a.Details)</td>
+    </tr>
+  }
+  </tbody>
+</table>
+</div>
