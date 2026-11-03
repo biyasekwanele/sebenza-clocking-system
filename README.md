@@ -1,80 +1,149 @@
 # Sebenza Clocking System
-Digital employee attendance &amp; working-hours management system for Umzamo Analytical Services. Flutter + ASP.NET + Supabase.
-# Sebenza Clocking System
 
-## Project Overview
+A digital employee attendance and working-hours management system developed for **Umzamo Analytical Services (UAS)**.
 
-Sebenza Clocking System is a digital employee attendance and
-working-hours management system developed for Umzamo Analytical
-Services.
+Sebenza replaces manual attendance registers with a digital solution that allows employees to clock in and out, track working hours, request overtime, and view attendance records. Supervisors and administrators can manage employees, review requests, monitor attendance, and generate reports.
 
-The system is intended to replace the organisation's current
-paper-based attendance process with a digital solution for recording
-employee clock-in and clock-out times and managing working hours.
+The system consists of a **Flutter mobile application**, an **ASP.NET Core MVC web application**, and a **Supabase backend**.
 
-## Problem Statement
+## Features
 
-Umzamo Analytical Services currently uses a manual paper-based
-process for recording employee attendance and working hours.
+### Mobile Application (Employees)
+- Employee login and profile
+- Clock-in, clock-out, and break tracking
+- Attendance history and late-arrival indicators
+- Overtime and attendance correction requests
+- Monthly working-hours breakdown
+- Payslip summary
 
-The current process creates a risk of inaccurate attendance records,
-as employees may record their normal starting time despite arriving
-late and may record overtime that was not actually worked.
+### Web Application (Management)
+- Dashboard with attendance statistics and charts
+- Employee and attendance management
+- Overtime approval and rejection
+- Attendance correction management
+- CSV and PDF report generation
+- Administrative audit logs
 
-Sebenza aims to improve the accuracy, reliability and management of
-employee attendance records.
+## Tech Stack
 
-## Project Aim
+| Component | Technology |
+|---|---|
+| Mobile Application | Flutter (Dart) |
+| Web Application | ASP.NET Core 8 MVC |
+| Database | PostgreSQL (Supabase) |
+| Authentication | Supabase Auth |
+| Frontend | Razor, HTML, CSS, JavaScript |
+| Reporting | QuestPDF, CSV |
 
-To develop a digital attendance and working-hours management system
-that allows employee attendance to be recorded accurately and enables
-authorised users to manage attendance information.
+## Getting Started
 
-## Main Features
+### Prerequisites
 
-- Employee authentication
-- Employee clock-in
-- Employee clock-out
-- Automatic date and time recording
-- Attendance history
-- Working-hours management
-- Overtime management
-- Employee management
-- Attendance monitoring and reporting
+- Flutter SDK
+- .NET 8 SDK
+- Android Studio or an Android emulator
+- Supabase project with the required database configuration
+- Git
 
+### 1. Clone the Repository
 
-### Frontend
-- Flutter
+```bash
+git clone https://github.com/biyasekwanele/sebenza-clocking-system.git
+cd sebenza-clocking-system
+```
 
-### Backend
-- ASP.NET
+### 2. Run the Mobile Application
 
-### Database
-- Supabase
+Navigate to the Flutter project:
 
-## System Architecture
+```bash
+cd mobile-app
+flutter pub get
+flutter run
+```
 
-Flutter Mobile Application
-        |
-        v
-ASP.NET Backend/API
-        |
-        v
-Supabase Database
+Select a connected Android device or emulator when prompted.
+
+The mobile application requires valid Supabase configuration and an employee account.
+
+### 3. Run the Web Application
+
+From the repository root:
+
+```bash
+dotnet restore web-app/SebenzaClocking.sln
+dotnet run --project web-app/src/SebenzaClocking.Web
+```
+
+Open the localhost address displayed in your terminal.
+
+Sign in with a configured supervisor, HR, or administrator account.
+
+Both applications must be connected to the configured Supabase backend.
+
+### 4. Run Tests
+
+**Flutter**
+
+```bash
+cd mobile-app
+flutter analyze
+flutter test
+```
+
+**ASP.NET Core**
+
+From the repository root:
+
+```bash
+dotnet test web-app/SebenzaClocking.sln
+```
+
+Latest verified results:
+- Flutter: 11 tests passed
+- ASP.NET Core: 9 tests passed
+- Flutter analysis: No issues found
+
+## Project Structure
+
+```text
+sebenza-clocking-system/
+├── docs/                  # Project documentation
+├── mobile-app/            # Flutter employee application
+│   ├── lib/
+│   ├── test/
+│   └── pubspec.yaml
+├── web-app/               # ASP.NET Core MVC application
+│   ├── src/
+│   ├── tests/
+│   └── SebenzaClocking.sln
+├── supabase/              # Backend resources
+├── project-management/    # Project management files
+└── README.md
+```
 
 ## Project Status
 
-**Current Phase:** Phase 1 – Software Requirements Specification
-**Current Phase:** Phase 2 - PHASE 2: SYSTEM ARCHITECTURE AND DESIGN
+- [x] Phase 1 — Requirements Analysis
+- [x] Phase 2 — System Design
+- [x] Phase 3 — Implementation
+- [x] Unit Testing
 
-# members: 
-Vilane N 
-Choane SRT
-Makhetha L
-Sikithi T
-Leeuw SA
-Biyase K
-Sekotlo PG
-Choeu TM
-Stallenburg P
-Mandiba T
+## Contributors
+
+| GitHub | Contribution |
+|---|---|
+| [biyasekwanele](https://github.com/biyasekwanele) | Backend architecture and integration |
+| [PGSekotlo](https://github.com/PGSekotlo) | Mobile login and profile |
+| [tshegochoane42-hue](https://github.com/tshegochoane42-hue) | Mobile clock-in and attendance |
+| [TshepisoChoeu1004](https://github.com/TshepisoChoeu1004) | Mobile overtime and corrections |
+| [stallenbergpedro3](https://github.com/stallenbergpedro3) | Mobile payslip and monthly hours |
+| [TakalaniMs](https://github.com/TakalaniMs) | Web dashboard and charts |
+| [leratomakhetha](https://github.com/leratomakhetha) | Web employees and attendance |
+| [Nkosinathi2002](https://github.com/Nkosinathi2002) | Web overtime and corrections |
+| [Thape123](https://github.com/Thape123) | Web reports and audit logs |
+| [Selloane646](https://github.com/Selloane646) | Layouts, navigation and styling |
+
+## Project Documentation
+
+Additional documentation is available in the [`docs/`](docs/) directory.
