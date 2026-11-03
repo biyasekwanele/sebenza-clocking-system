@@ -1,0 +1,52 @@
+@model DashboardViewModel
+@{ ViewData["Title"] = "Dashboard"; }
+<section class="kpis" id="kpis" data-poll-url="@Url.Action("Poll")">
+  <div class="kpi"><span class="kpi-num" id="kpi-present">@Model.Present</span><span class="kpi-label">Present today</span></div>
+  <div class="kpi"><span class="kpi-num amber" id="kpi-late">@Model.Late</span><span class="kpi-label">Late arrivals</span></div>
+  <div class="kpi"><span class="kpi-num blue" id="kpi-completed">@Model.Completed</span><span class="kpi-label">Shifts completed</span></div>
+  <div class="kpi"><span class="kpi-num red" id="kpi-absent">@Model.Absent</span><span class="kpi-label">Not yet in</span></div>
+  <div class="kpi"><span class="kpi-num" id="kpi-ot">@Model.PendingOvertime</span><span class="kpi-label">Pending overtime</span></div>
+</section>
+<section class="grid-2">
+  <div class="panel">
+    <h2>Presence — last 14 days</h2>
+    <div id="trend" data-labels='@System.Text.Json.JsonSerializer.Serialize(Model.TrendLabels)'
+         data-values='@System.Text.Json.JsonSerializer.Serialize(Model.Trend)'></div>
+  </div>
+  <div class="panel">
+    <h2>Pending overtime</h2>
+    @if (Model.RecentOvertime.Any()) {
+      <ul class="feed">
+        @foreach (var o in Model.RecentOvertime)
+        { <li><a asp-controller="Overtime" asp-action="Index">@o.EmployeeName</a> · @Sast.Date(o.WorkDate) · <strong>@o.Hours.ToString("0.00")h</strong></li> }
+      </ul>
+    } else { <p class="empty">No overtime requests waiting for review.</p> }
+  </div>
+</section>
+<section class="panel">
+  <h2>Live activity</h2>
+  <table class="tbl">
+    <thead><tr><th>Time</th><th>Employee</th><th>Event</th><th>Flag</th></tr></thead>
+    <tbody>
+    @foreach (var a in Model.Activity)
+    {
+      <tr>
+        <td>@Sast.DateTime(a.ClockIn)</td>
+        <td>@a.EmployeeName</td>
+        <td>@(a.ClockOut is null ? "Clocked in" : "Completed shift")</td>
+        <td>@(a.IsLate ? Html.Raw("<span class='tag red'>LATE</span>") : Html.Raw("<span class='tag green'>ON TIME</span>"))</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</section>
+@section Scripts { <script src="~/js/charts.js"></script>
+<script>
+lineChart(document.getElementById("trend"));
+const k = id => document.getElementById(id);
+setInterval(() => fetch(document.getElementById("kpis").dataset.pollUrl)
+  .then(r => { if (!r.ok) throw 0; return r.json(); })
+  .then(d => { k("kpi-present").textContent = d.present; k("kpi-late").textContent = d.late;
+    k("kpi-completed").textContent = d.completed; k("kpi-absent").textContent = d.absent;
+    k("kpi-ot").textContent = d.pendingOvertime; }).catch(() => {}), 30000);
+</script> }
