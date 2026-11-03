@@ -1,0 +1,27 @@
+@model CorrectionsViewModel
+@{ ViewData["Title"] = "Attendance Corrections"; }
+<section class="panel">
+  <h2>Pending correction requests (@Model.Pending.Count)</h2>
+  @foreach (var c in Model.Pending)
+  {
+    <div class="ot-card">
+      <div class="ot-head"><strong>@c.EmployeeName</strong> <span class="muted">@Sast.DateTime(c.CreatedAt)</span></div>
+      <p>Change <strong>@c.Field</strong>: <span class="strike">@c.OldValue</span> → <strong>@c.NewValue</strong></p>
+      <blockquote>@c.Reason</blockquote>
+      <form method="post" asp-action="Review" class="ot-decide" onsubmit="return confirm('Apply this correction to the attendance record?')">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@c.Id" />
+        <button class="btn approve" name="approve" value="true">APPROVE &amp; APPLY</button>
+        <button class="btn reject" name="approve" value="false">REJECT</button>
+      </form>
+    </div>
+  }
+  @if (!Model.Pending.Any()) { <p class="empty">No correction requests waiting.</p> }
+</section>
+<section class="panel">
+  <h2>History</h2>
+  <table class="tbl"><thead><tr><th>Employee</th><th>Field</th><th>Old</th><th>New</th><th>Status</th><th>Reviewed at</th></tr></thead>
+  <tbody>@foreach (var c in Model.History) { <tr><td>@c.EmployeeName</td><td>@c.Field</td><td>@c.OldValue</td><td>@c.NewValue</td>
+    <td><span class="tag @(c.Status == "Approved" ? "green" : "red")">@c.Status</span></td>
+    <td>@(c.ReviewedAt is null ? "—" : Sast.DateTime(c.ReviewedAt.Value))</td></tr> }</tbody></table>
+</section>

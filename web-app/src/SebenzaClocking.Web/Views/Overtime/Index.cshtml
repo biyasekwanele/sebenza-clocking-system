@@ -1,0 +1,33 @@
+@model IReadOnlyList<OvertimeRequest>
+@{ ViewData["Title"] = "Overtime Management";
+   var pending = Model.Where(o => o.Status == "Pending").ToList();
+   var decided = Model.Where(o => o.Status != "Pending").Take(50).ToList(); }
+<section class="panel">
+  <h2>Pending requests (@pending.Count)</h2>
+  @foreach (var o in pending)
+  {
+    <div class="ot-card">
+      <div class="ot-head"><strong>@o.EmployeeName</strong> <span class="muted">@Sast.Date(o.WorkDate)</span></div>
+      <div class="ot-hours">@o.Hours.ToString("0.00")h overtime</div>
+      <blockquote>@o.Reason</blockquote>
+      <form method="post" asp-action="Review" class="ot-decide"
+            onsubmit="return confirm('@(o.EmployeeId == Guid.Empty ? "" : "")' + 'Record this decision?')">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@o.Id" />
+        <button class="btn approve" name="approve" value="true">APPROVE</button>
+        <button class="btn reject" name="approve" value="false">REJECT</button>
+      </form>
+    </div>
+  }
+  @if (!pending.Any()) { <p class="empty">No overtime requests waiting for review.</p> }
+</section>
+<section class="panel">
+  <h2>Decision history</h2>
+  <table class="tbl"><thead><tr><th>Date</th><th>Employee</th><th>Hours</th><th>Status</th><th>Reviewed at</th></tr></thead>
+  <tbody>
+  @foreach (var o in decided)
+  { <tr><td>@Sast.Date(o.WorkDate)</td><td>@o.EmployeeName</td><td>@o.Hours.ToString("0.00")h</td>
+        <td><span class="tag @(o.Status == "Approved" ? "green" : "red")">@o.Status</span></td>
+        <td>@(o.ReviewedAt is null ? "—" : Sast.DateTime(o.ReviewedAt.Value))</td></tr> }
+  </tbody></table>
+</section>
